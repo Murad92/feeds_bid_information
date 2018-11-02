@@ -68,13 +68,15 @@
         <tr style="height: 50px; background: rgba(15,39,70,0.38);">
             <th rowspan="2" style="width: content-box; padding-left: 19px; padding-right: 19px">DATE</th>
             @foreach($feeds as $feedName)
-                <th style="text-align: center" colspan="3">{!! $feedName !!}</th>
+                <th style="text-align: center" colspan="5">{!! $feedName !!}</th>
             @endforeach
         </tr>
         <tr>
             @foreach($feeds as $feedName)
                 <th style="top: 48px">Revenue</th>
                 <th style="top: 48px">Impression</th>
+                <th style="top: 48px">Click</th>
+                <th style="top: 48px">CTR</th>
                 <th style="padding-left: 15px; padding-right: 15px; top: 48px">eCPM</th>
             @endforeach
         </tr>
@@ -90,9 +92,11 @@
                 }
                 $color++;?>
                 @foreach($feeds as $feedName)
-                    <td style="background: {!! $background !!}">{!! isset($dat['revenue_'.$feedName]) ? $dat['revenue_'.$feedName] : 0!!}</td>
+                    <td style="background: {!! $background !!}">{!! isset($dat['revenue_'.$feedName]) ? round($dat['revenue_'.$feedName],2,PHP_ROUND_HALF_DOWN) : 0!!}</td>
                     <td style="background: {!! $background !!}">{!! isset($dat['show_'.$feedName]) ? $dat['show_'.$feedName] : 0!!}</td>
+                    <td style="background: {!! $background !!}">{!! isset($dat['click_'.$feedName]) ? $dat['click_'.$feedName] : 0!!}</td>
 
+                    <td style="background: {!! $background !!}">{!! isset($dat['show_'.$feedName]) && isset($dat['click_'.$feedName]) && $dat['show_'.$feedName] !=0 ? ($limit <= $dat['show_'.$feedName]) ? round(($dat['click_'.$feedName]/$dat['show_'.$feedName])*100,3,PHP_ROUND_HALF_DOWN).'%'  : '0%' : '0%'!!}</td>
                     <td style="background: {!! $background !!}">{!! isset($dat['show_'.$feedName]) && isset($dat['revenue_'.$feedName]) && $dat['show_'.$feedName] !=0 ? ($limit <= $dat['show_'.$feedName]) ? round(($dat['revenue_'.$feedName]/$dat['show_'.$feedName])*1000,3,PHP_ROUND_HALF_DOWN). ' $ ' : '0 $' : '0 $'!!}</td>
                 @endforeach
 

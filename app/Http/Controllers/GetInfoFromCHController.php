@@ -36,10 +36,13 @@ class GetInfoFromCHController extends Controller
 
     public  function getDataForeCPM($options)
     {
+
         $sql = "SELECT ";
         foreach ($options['feeds'] as $campagneId => $feedName) {
-            $sql .= " floor (sumIf(price, (event_type = 'click') AND (campaign_id = {$campagneId}) AND (price < 2))) AS revenue_{$feedName},
-                         countIf(event_type, (event_type= 'show') AND (campaign_id = {$campagneId}) AND (price < 2)) AS show_{$feedName},";
+            $sql .= " sumIf(price, (event_type = 'click') AND (campaign_id = {$campagneId}) AND (price < 2)) AS revenue_{$feedName},
+                         countIf(event_type, (event_type= 'show') AND (campaign_id = {$campagneId}) AND (price < 2)) AS show_{$feedName},
+                         countIf(event_type, (event_type= 'click') AND (campaign_id = {$campagneId}) AND (price < 2)) AS click_{$feedName},
+                         ";
         }
         $sql .= " substring(toString(event_time), 1, 10) AS x
           FROM push_notifications
